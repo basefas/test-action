@@ -32,17 +32,3 @@ jobs:
           release_id: ${{ steps.get_release.outputs.id }}
           asset_path: ./my-artifact.zip
           asset_name: my-artifact.zip
-
-      - name: Build project2
-        run: |
-          tar -czf my-artifact.tar.gz README.md
-
-      - name: Upload Release Asset2
-        id: upload-release-asset2
-        uses: ./
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          release_id: ${{ steps.get_release.outputs.id }}
-          asset_path: ./my-artifact.tar.gz
-          asset_name: my-artifact2.tar.gz
