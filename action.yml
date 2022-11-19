@@ -1,4 +1,4 @@
-name: 'Your name here'
+name: 'upload-release-asset-action'
 description: 'An Action to upload a release asset.'
 author: 'basefas'
 inputs:
@@ -19,3 +19,6 @@ outputs:
 runs:
   using: 'node16'
   main: 'dist/index.js'
+branding:
+  icon: 'package'
+  color: 'gray-dark'
