@@ -1,105 +1,65 @@
-<p align="center">
-  <a href="https://github.com/actions/typescript-action/actions"><img alt="typescript-action status" src="https://github.com/actions/typescript-action/workflows/build-test/badge.svg"></a>
-</p>
+# GitHub Action - Upload A Release Asset
 
-# Create a JavaScript Action using TypeScript
+This GitHub Action wraps the [GitHub Release API](https://docs.github.com/en/rest/releases), specifically the [Upload A Release Asset](https://docs.github.com/en/rest/releases/assets#upload-a-release-asset) endpoint, to allow you to leverage GitHub Actions to upload release assets.
 
-Use this template to bootstrap the creation of a TypeScript action.:rocket:
+## Usage
+### Pre-requisites
+Create a workflow `.yml` file in your repositories `.github/workflows` directory. For more information, reference the GitHub Help Documentation for [Quickstart for GitHub Actions](https://docs.github.com/en/actions/quickstart). You also will need to have a release to upload your asset to, which could be created programmatically by [`@bruceadams/get-release`](https://github.com/bruceadams/get-release) as show in the example workflow.
 
-This template includes compilation support, tests, a validation workflow, publishing, and versioning guidance.  
+This Action needs the environment variable `GITHUB_TOKEN` to be set correctly.
 
-If you are new, there's also a simpler introduction.  See the [Hello World JavaScript Action](https://github.com/actions/hello-world-javascript-action)
+### Inputs
+For more information on these inputs, see the [API Documentation](https://docs.github.com/en/rest/releases/assets#upload-a-release-asset) <Parameters>
 
-## Create an action from this template
+- `release_id`: The ID uploading assets to the release, which could come from another GitHub Action, for example the [`@bruceadams/get-release`](https://github.com/bruceadams/get-release) GitHub Action
 
-Click the `Use this Template` and provide the new repo details for your action
+### Outputs
+For more information on these outputs, see the [API Documentation](https://docs.github.com/en/rest/releases/assets#upload-a-release-asset) <Response for successful upload>
 
-## Code in Main
+- `id`: The ID of the asset
+- `browser_download_url`: The URL users can navigate to in order to download the release asset.
 
-> First, you'll need to have a reasonably modern version of `node` handy. This won't work with versions older than 9, for instance.
-
-Install the dependencies  
-```bash
-$ npm install
-```
-
-Build the typescript and package it for distribution
-```bash
-$ npm run build && npm run package
-```
-
-Run the tests :heavy_check_mark:  
-```bash
-$ npm test
-
- PASS  ./index.test.js
-  ✓ throws invalid number (3ms)
-  ✓ wait 500 ms (504ms)
-  ✓ test runs (95ms)
-
-...
-```
-
-## Change action.yml
-
-The action.yml defines the inputs and output for your action.
-
-Update the action.yml with your name, description, inputs and outputs for your action.
-
-See the [documentation](https://help.github.com/en/articles/metadata-syntax-for-github-actions)
-
-## Change the Code
-
-Most toolkit and CI/CD operations involve async operations so the action is run in an async function.
-
-```javascript
-import * as core from '@actions/core';
-...
-
-async function run() {
-  try { 
-      ...
-  } 
-  catch (error) {
-    core.setFailed(error.message);
-  }
-}
-
-run()
-```
-
-See the [toolkit documentation](https://github.com/actions/toolkit/blob/master/README.md#packages) for the various packages.
-
-## Publish to a distribution branch
-
-Actions are run from GitHub repos so we will checkin the packed dist folder. 
-
-Then run [ncc](https://github.com/zeit/ncc) and push the results:
-```bash
-$ npm run package
-$ git add dist
-$ git commit -a -m "prod dependencies"
-$ git push origin releases/v1
-```
-
-Note: We recommend using the `--license` option for ncc, which will create a license file for all of the production node modules used in your project.
-
-Your action is now published! :rocket: 
-
-See the [versioning documentation](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md)
-
-## Validate
-
-You can now validate the action by referencing `./` in a workflow in your repo (see [test.yml](.github/workflows/test.yml))
+### Example workflow - upload a release asset
+On every `push` to a tag matching the pattern `v*`, [create a release](https://docs.github.com/en/rest/releases/releases#create-a-release) and [upload a release asset](https://docs.github.com/en/rest/releases/assets#upload-a-release-asset). This Workflow example assumes you have the [`@bruceadams/get-release`](https://github.com/bruceadams/get-release) Action in a previous step:
 
 ```yaml
-uses: ./
-with:
-  milliseconds: 1000
+on:
+  push:
+    # Sequence of patterns matched against refs/tags
+    tags:
+    - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+
+name: Upload Release Asset
+
+jobs:
+  build:
+    name: Upload Release Asset
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build project # This would actually build your project, using zip for an example artifact
+        run: |
+          zip --junk-paths my-artifact README.md
+      - name: Get Release
+        id: get_release
+        uses: bruceadams/get-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: basefas/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          release_id: ${{ steps.get_release.outputs.id }} # This pulls from the Get RELEASE step above, referencing its ID to get its outputs object, which include a `id`.
+          asset_path: ./my-artifact.zip
+          asset_name: my-artifact.zip
 ```
 
-See the [actions tab](https://github.com/actions/typescript-action/actions) for runs of this action! :rocket:
+This will upload a release artifact to an existing release, outputting the `browser_download_url` for the asset which could be handled by a third party service, or by GitHub Actions for additional uses. For more information, see the GitHub Documentation for the [upload a release asset](https://docs.github.com/en/rest/releases/assets#upload-a-release-asset) endpoint.
 
-## Usage:
-
-After testing you can [create a v1 tag](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md) to reference the stable and latest V1 action
+## License
+The scripts and documentation in this project are released under the [MIT License](LICENSE)

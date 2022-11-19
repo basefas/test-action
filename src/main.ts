@@ -36,6 +36,7 @@ async function run(): Promise<void> {
       data
     })
 
+    core.setOutput('id', uploadAssetResponse.data.id)
     core.setOutput('browser_download_url', uploadAssetResponse.data.browser_download_url)
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
