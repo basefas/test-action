@@ -1,11 +1,19 @@
 name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+description: 'An Action to upload a release asset.'
+author: 'basefas'
 inputs:
-  milliseconds: # change this
+  release_id:
+    description: 'ID for uploading assets to the release'
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+  asset_path:
+    description: 'The path to the asset you want to upload'
+    required: true
+  asset_name:
+    description: 'The name of the asset you want to upload'
+    required: true
+outputs:
+  browser_download_url:
+    description: 'The URL users can navigate to in order to download the uploaded asset'
 runs:
   using: 'node16'
   main: 'dist/index.js'

@@ -1,16 +1,42 @@
 import * as core from '@actions/core'
-import {wait} from './wait'
+import * as fs from 'fs'
+import * as github from '@actions/github'
+// eslint-disable-next-line import/named
+import { Endpoints } from '@octokit/types'
+
+type UploadAssetResp =
+  Endpoints['POST {origin}/repos/{owner}/{repo}/releases/{release_id}/assets{?name,label}']['response']
 
 async function run(): Promise<void> {
   try {
-    const ms: string = core.getInput('milliseconds')
-    core.debug(`Waiting ${ms} milliseconds ...`) // debug is only output if you set the secret `ACTIONS_STEP_DEBUG` to true
+    const githubToken = process.env.GITHUB_TOKEN
+    if (!githubToken) {
+      core.setFailed('GITHUB_TOKEN need to set in env.')
+      return
+    }
 
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
+    const releaseId = core.getInput('upload_id', { required: true })
+    const release_id = Number(releaseId)
+    if (isNaN(release_id)) {
+      core.setFailed('release ID is not a valid integer.')
+    }
+    const assetName = core.getInput('asset_name', { required: true })
+    const assetPath = core.getInput('asset_path', { required: true })
+    const octokit = github.getOctokit(githubToken)
+    const context = github.context
+    const name = assetName
+    const data = fs.readFileSync(assetPath).toString()
+    const { owner, repo } = context.repo
 
-    core.setOutput('time', new Date().toTimeString())
+    const uploadAssetResponse: UploadAssetResp = await octokit.rest.repos.uploadReleaseAsset({
+      owner,
+      repo,
+      release_id,
+      name,
+      data
+    })
+
+    core.setOutput('browser_download_url', uploadAssetResponse.data.browser_download_url)
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
   }
