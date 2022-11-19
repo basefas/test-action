@@ -1,12 +1,17 @@
 # GitHub Action - Upload A Release Asset
 
+This GitHub Action is written according to the action [`actions/upload-release-asset`](https://github.com/actions/upload-release-asset) which has been archived.
+
+It has solved the `Node.js 12 actions are deprecated.` warnings.
+
 This GitHub Action wraps the [GitHub Release API](https://docs.github.com/en/rest/releases), specifically the [Upload A Release Asset](https://docs.github.com/en/rest/releases/assets#upload-a-release-asset) endpoint, to allow you to leverage GitHub Actions to upload release assets.
 
 ## Usage
 ### Pre-requisites
 Create a workflow `.yml` file in your repositories `.github/workflows` directory. For more information, reference the GitHub Help Documentation for [Quickstart for GitHub Actions](https://docs.github.com/en/actions/quickstart). You also will need to have a release to upload your asset to, which could be created programmatically by [`@bruceadams/get-release`](https://github.com/bruceadams/get-release) as show in the example workflow.
 
-This Action needs the environment variable `GITHUB_TOKEN` to be set correctly.
+This Action needs the environment variable `${{ secrets.GITHUB_TOKEN }}` to be set correctly.
+`GITHUB_TOKEN` secret created automatically by GitHub, and you don't need more operation. For more information, see the [Automatic token authentication](https://docs.github.com/en/actions/security-guides/automatic-token-authentication)
 
 ### Inputs
 For more information on these inputs, see the [API Documentation](https://docs.github.com/en/rest/releases/assets#upload-a-release-asset) <Parameters>
@@ -42,6 +47,7 @@ jobs:
       - name: Build project # This would actually build your project, using zip for an example artifact
         run: |
           zip --junk-paths my-artifact README.md
+
       - name: Get Release
         id: get_release
         uses: bruceadams/get-release@v1
