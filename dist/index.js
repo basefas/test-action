@@ -46,7 +46,7 @@ function run() {
                 core.setFailed('GITHUB_TOKEN need to set in env.');
                 return;
             }
-            const releaseId = core.getInput('upload_id', { required: true });
+            const releaseId = core.getInput('release_id', { required: true });
             const release_id = Number(releaseId);
             if (isNaN(release_id)) {
                 core.setFailed('release ID is not a valid integer.');
