@@ -65,6 +65,7 @@ function run() {
                 name,
                 data
             });
+            core.setOutput('id', uploadAssetResponse.data.id);
             core.setOutput('browser_download_url', uploadAssetResponse.data.browser_download_url);
         }
         catch (error) {
