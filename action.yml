@@ -1,4 +1,4 @@
-name: 'upload-release-asset'
+name: 'upload-release-asset-action'
 description: 'An Action to upload a release asset.'
 author: 'basefas'
 inputs:
