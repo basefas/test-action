@@ -1,4 +1,4 @@
-name: Upload Release Asset
+name: Release
 
 on:
   push:
@@ -13,14 +13,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Build project
-        run: |
-          zip --junk-paths my-artifact README.md
       - name: Get Release
         id: get_release
         uses: bruceadams/get-release@v1.3.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build project
+        run: |
+          zip --junk-paths my-artifact README.md
 
       - name: Upload Release Asset
         id: upload-release-asset
@@ -31,3 +32,17 @@ jobs:
           release_id: ${{ steps.get_release.outputs.id }}
           asset_path: ./my-artifact.zip
           asset_name: my-artifact.zip
+
+      - name: Build project2
+        run: |
+          tar -czf my-artifact.tar.gz README.md
+
+      - name: Upload Release Asset2
+        id: upload-release-asset2
+        uses: ./
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          release_id: ${{ steps.get_release.outputs.id }}
+          asset_path: ./my-artifact.tar.gz
+          asset_name: my-artifact2.tar.gz
