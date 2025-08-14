@@ -18,3 +18,4 @@ jobs:
       - name: Print commit SHA (context expression)
         run: |
             echo "The commit SHA from context is: ${{ github.sha }}"
+            echo "The commit SHA from context is: ${GITHUB_SHA:0:7}"
