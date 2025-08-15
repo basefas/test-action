@@ -1,9 +1,6 @@
-name: action-test
+name: action-test-2
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
 
 jobs:
