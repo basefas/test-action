@@ -1,0 +1,19 @@
+name: action-test-3
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Print commit SHA (environment variable)
+        run: |
+            echo "The commit SHA is: $GITHUB_SHA"
+      - name: Print commit SHA (context expression)
+        run: |
+            echo "The commit SHA from context is: ${{ github.sha }}"
+            echo "The commit SHA from context is: ${GITHUB_SHA:0:7}"
+            echo "The commit SHA from context is: ${{ github.sha }}:0:7"
