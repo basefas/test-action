@@ -2,6 +2,7 @@ name: action-test-2
 
 on:
   workflow_dispatch:
+  push:
 
 jobs:
   build:
@@ -12,6 +13,8 @@ jobs:
       - name: Print commit SHA (environment variable)
         run: |
             echo "The commit SHA is: $GITHUB_SHA"
+            jq --version
+            yq --version
       - name: Print commit SHA (context expression)
         run: |
             echo "The commit SHA from context is: ${{ github.sha }}"
