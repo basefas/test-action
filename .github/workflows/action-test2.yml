@@ -14,8 +14,13 @@ jobs:
           python-version: 3.12
       - name: pip
         run:
+          echo "-------"
+          /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12 --verion
+          echo "-------"
           python --version
+          echo "-------"
           python -m pip --version
+          echo "-------"
       # - name: Archive tool cache
       #   run: |
       #     cd "${{ runner.tool_cache }}"
