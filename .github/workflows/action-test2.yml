@@ -14,19 +14,19 @@ jobs:
           python-version: 3.12
       - name: python - 1
         run: |
-          python --verion
+          python --version
 
       - name: python - 2
         run: |
-          /opt/hostedtoolcache/Python/3.12.13/x64/bin/python --verion
+          /opt/hostedtoolcache/Python/3.12.13/x64/bin/python --version
 
       - name: pip - 1
         run: |
-          pip --verion
+          pip --version
 
       - name: pip - 2
         run: |
-          /opt/hostedtoolcache/Python/3.12.13/x64/bin/python --verion
+          /opt/hostedtoolcache/Python/3.12.13/x64/bin/python --version
 
       # - name: Archive tool cache
       #   run: |
