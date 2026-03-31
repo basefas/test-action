@@ -13,7 +13,7 @@ jobs:
         with:
           python-version: 3.12
       - name: pip
-        run:
+        run: |
           echo "-------"
           /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12 --verion
           echo "-------"
