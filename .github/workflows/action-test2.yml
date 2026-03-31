@@ -4,23 +4,30 @@ jobs:
   upload_tool_cache:
     runs-on: ubuntu-latest
     steps:
-      - name: Clear any existing tool cache
-        run: |
-          mv "${{ runner.tool_cache }}" "${{ runner.tool_cache }}.old"
-          mkdir -p "${{ runner.tool_cache }}"
+      # - name: Clear any existing tool cache
+      #   run: |
+      #     mv "${{ runner.tool_cache }}" "${{ runner.tool_cache }}.old"
+      #     mkdir -p "${{ runner.tool_cache }}"
       - name: Setup Python 3.12
         uses: actions/setup-python@v6
         with:
           python-version: 3.12
-      - name: pip
+      - name: python - 1
         run: |
-          echo "-------"
-          /opt/hostedtoolcache/Python/3.12.13/x64/bin/python3.12 --verion
-          echo "-------"
-          python --version
-          echo "-------"
-          python -m pip --version
-          echo "-------"
+          python --verion
+
+      - name: python - 2
+        run: |
+          /opt/hostedtoolcache/Python/3.12.13/x64/bin/python --verion
+
+      - name: pip - 1
+        run: |
+          pip --verion
+
+      - name: pip - 2
+        run: |
+          /opt/hostedtoolcache/Python/3.12.13/x64/bin/python --verion
+
       # - name: Archive tool cache
       #   run: |
       #     cd "${{ runner.tool_cache }}"
