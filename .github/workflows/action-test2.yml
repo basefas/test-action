@@ -8,19 +8,19 @@ jobs:
         run: |
           mv "${{ runner.tool_cache }}" "${{ runner.tool_cache }}.old"
           mkdir -p "${{ runner.tool_cache }}"
-      - name: Setup Node 22
-        uses: actions/setup-node@v6
-        with:
-          node-version: 22.x
       - name: Setup Python 3.12
         uses: actions/setup-python@v6
         with:
           python-version: 3.12
-      - name: Archive tool cache
-        run: |
-          cd "${{ runner.tool_cache }}"
-          tar -czf tool_cache.tar.gz *
-      - name: Upload tool cache artifact
-        uses: actions/upload-artifact@v7
-        with:
-          path: ${{runner.tool_cache}}/tool_cache.tar.gz
+      - name: pip
+        run:
+          python --version
+          python -m pip --version
+      # - name: Archive tool cache
+      #   run: |
+      #     cd "${{ runner.tool_cache }}"
+      #     tar -czf tool_cache.tar.gz *
+      # - name: Upload tool cache artifact
+      #   uses: actions/upload-artifact@v7
+      #   with:
+      #     path: ${{runner.tool_cache}}/tool_cache.tar.gz
