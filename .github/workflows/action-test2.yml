@@ -15,7 +15,7 @@ jobs:
       - name: pip
         run: |
           echo "-------"
-          /opt/hostedtoolcache/Python/3.12.13/x64/lib/python3.12 --verion
+          /opt/hostedtoolcache/Python/3.12.13/x64/bin/python3.12 --verion
           echo "-------"
           python --version
           echo "-------"
